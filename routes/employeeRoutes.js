@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
 	var id = req.params.id;
-	var found = User.findOne({ _id: id }, function (err, item) {
+	User.findOne({ _id: id }, function (err, item) {
 		if (err || item == null) {
 			res.send("not found")
 		} else {
@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-	var found = User.findOne({ _id: id }, function (err, item) {
+	User.findOne({ _id: id }, function (err, item) {
 		if (err || item == null) {
 			res.send("not found")
 		} else {
@@ -44,7 +44,7 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
 	var id = req.params.id;
-	var found = User.findOne({ _id: id }).remove(function (err, item) {
+	User.findOne({ _id: id }).remove(function (err, item) {
 		if (err || item == null) {
 			res.send("not deleted")
 		} else

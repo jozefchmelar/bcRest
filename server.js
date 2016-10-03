@@ -2,7 +2,7 @@ console.log('Node started')
 // =======================
 // packages
 // ======================= 
-const PORT      = 3000;
+var PORT        = 3000;
 var express     = require('express');
 var app         = express();
 var jwt         = require('jsonwebtoken');
@@ -38,7 +38,7 @@ app.post('/login', (req, res) => {
     user.comparePassword(req.body.password, function (err, isMatch) {
     if(isMatch==true){
        var token = jwt.sign(user, app.get('superSecret'), {
-          expiresIn: 60 // expires in 24 hours
+          expiresIn: 60*60*24 // expires in 24 hours
         }); 
 
         // return the information including token as JSON
