@@ -30,8 +30,6 @@ app.use(morgan('dev')); //logging style
 // =======================
 // routes 
 // =======================
-
-
 app.post('/login', (req, res) => {
   var User = require(__parentDir + '/models/employeeModel');
   User.findOne({ email: req.body.email }, function (err, user) {
@@ -53,7 +51,7 @@ app.post('/login', (req, res) => {
     });
   });
 })
-
+// middleware for authentication
 app.use(function(req, res, next) {
   // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
