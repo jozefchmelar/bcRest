@@ -1,16 +1,21 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var employeeSchema = require('./employeeModel');
+var autoIncrement = require('mongoose-auto-increment');
 
-var ProjectSchema = new Schema({   
-   name: { type: String, required: true },
-   number: { type: String, required: true, unique: true },
-   costumer: { type: String, required: true },
-   employeeIds: [{type: Number , ref: 'Employee'}]
+var projectSchema = new Schema({   
+    number: { type: String, required: true, unique: true },    
+    name: { type: String, required: true },
+    costumer: { type: String, required: true },
+    employees: [{type: Number , ref: 'Employee'}]
 },
-   {
-      versionKey: false // disables __v  in schema
-   });
+    {
+        versionKey: false // disables __v  in schema
+    });
 
-var projectModel = mongoose.model('Project', ProjectSchema);
+//autoincrement ID
+autoIncrement.initialize(mongoose.connection);
+projectSchema.plugin(autoIncrement.plugin, 'Project');
+
+var projectModel = mongoose.model('Project', projectSchema);
 module.exports = projectModel;
