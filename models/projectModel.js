@@ -7,7 +7,8 @@ var projectSchema = new Schema({
     number: { type: String, required: true, unique: true },    
     name: { type: String, required: true },
     costumer: { type: String, required: true },
-    employees: [{type: Number , ref: 'Employee'}]
+    employees: [{type: Number , ref: 'Employee'}],
+    comments: [{type: Schema.Types.ObjectId, ref:'Comment'}]
 },
     {
         versionKey: false // disables __v  in schema

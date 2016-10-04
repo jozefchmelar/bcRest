@@ -7,7 +7,7 @@ __parentDir = path.dirname(process.mainModule.filename);
 
 var User = require(__parentDir + '/models/employeeModel');
 var Project = require(__parentDir + '/models/projectModel');
-var util = require(__parentDir + '/util');
+var Comment = require(__parentDir + '/models/commentModel');
 
 router.get('/', (req, res) => {
     Project.find({}, function (err, projects) {
@@ -96,5 +96,76 @@ router.post('/:number/add', (req, res) => {
         }
     })
 });
+
+// post comment on certain project
+// format
+// id is employeeID in model as _id: Number
+// { userId: id, text:"lorem ipsum"} 
+router.post('/:number/comment', (req, res) => {
+    var number = req.params.number;
+
+    Project.findOne({ number: number }).exec(function (err, foundProject) {
+        if (err || foundProject == null) {
+            res.send("not found");
+        } else {
+            var comment = new Comment();
+            comment.author = req.body.userId;
+            comment.text = req.body.text;
+            comment.save();
+            foundProject.comments.push(comment);
+            foundProject.save();
+            res.send(comment);
+        }
+    });
+});
+
+router.get('/:number/comment', (req, res) => {
+    var number = req.params.number;
+
+    Project.findOne({ number: number }).populate({ path: 'comments', populate: { path: 'author', model: 'Employee' } }).exec(function (err, foundProject) {
+        if (err || foundProject == null) {
+            res.send("not found");
+        } else {
+            var found = foundProject.comments;
+            found = found.toObject()
+            for (var i = 0; i < found.length; i++) {
+                found[i].author.password = undefined
+                found[i].author.projects = undefined
+                console.log(found[i].author)
+            }
+            res.send(found)
+        }
+    });
+});
+
+router.put('/:number/comment', (req, res) => {
+    var number = req.params.number;
+    var commentId = req.body._id;
+    var changedText = req.body.text;
+    Comment.findOne({ _id: commentId }, (err, commentToEdit) => {
+        if (err || commentToEdit == null) {
+            res.send("not found");
+        } else {
+            commentToEdit.text = changedText;
+            commentToEdit.save();
+            res.send(commentToEdit);
+        }
+
+    })
+});
+
+router.delete('/:number/comment', (req, res) => {
+    var projectNumber = req.params.number;
+    var commentId = req.body._id;
+    Comment.findOne({ _id: commentId }).remove().exec();
+    Project.findOne({ number: projectNumber }, (err, foundProject) => {
+        delete(foundProject.comments.indexOf(projectNumber));
+        res.send("del")
+    })
+});
+
+
+
+
 
 module.exports = router;
