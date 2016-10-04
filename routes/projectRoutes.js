@@ -17,8 +17,8 @@ router.get('/', (req, res) => {
 
 router.get('/:number', (req, res) => {
     var number = req.params.number;
-
-    Project.findOne({ number: number }).populate('employees').exec(function (err, item) {
+    var attributesToDispaly = 'firstName lastName email';
+    Project.findOne({ number: number }).populate('employees',attributesToDispaly).exec(function (err, item) {
         if (err || item == null) {
             res.send("not found");
         } else {
@@ -74,7 +74,7 @@ router.post('/:number/add', (req, res) => {
             // add only new user numbers to project
             for (userID of usersIDsToAdd) {
                 if (project.employees.indexOf(userID) === -1) {
-                    project.employees.push(userID)
+                    project.employees.push(userID);
                 }
             }
             project.save();
@@ -90,17 +90,17 @@ router.post('/:number/add', (req, res) => {
                         }
                         userToAdd.save();
                     }
-                })
+                });
             }
-            res.send("OK")
+            res.send("OK");
         }
-    })
+    });
 });
 
 // post comment on certain project
 // format
 // id is employeeID in model as _id: Number
-// { userId: id, text:"lorem ipsum"} 
+// { "userId": id, "text":"lorem ipsum"} 
 router.post('/:number/comment', (req, res) => {
     var number = req.params.number;
 
@@ -127,13 +127,13 @@ router.get('/:number/comment', (req, res) => {
             res.send("not found");
         } else {
             var found = foundProject.comments;
-            found = found.toObject()
+            found = found.toObject();
             for (var i = 0; i < found.length; i++) {
-                found[i].author.password = undefined
-                found[i].author.projects = undefined
-                console.log(found[i].author)
+                found[i].author.password = undefined;
+                found[i].author.projects = undefined;
+                console.log(found[i].author);
             }
-            res.send(found)
+            res.send(found);
         }
     });
 });
@@ -151,7 +151,7 @@ router.put('/:number/comment', (req, res) => {
             res.send(commentToEdit);
         }
 
-    })
+    });
 });
 
 router.delete('/:number/comment', (req, res) => {
@@ -160,8 +160,8 @@ router.delete('/:number/comment', (req, res) => {
     Comment.findOne({ _id: commentId }).remove().exec();
     Project.findOne({ number: projectNumber }, (err, foundProject) => {
         delete(foundProject.comments.indexOf(projectNumber));
-        res.send("del")
-    })
+        res.send("del");
+    });
 });
 
 

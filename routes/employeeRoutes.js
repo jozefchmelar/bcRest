@@ -7,6 +7,8 @@ __parentDir = path.dirname(process.mainModule.filename);
 
 var User = require(__parentDir + '/models/employeeModel');
 var Project = require(__parentDir + '/models/projectModel');
+var Comment = require(__parentDir + '/models/commentModel');
+
 //{passoword:0} don't dislpay passwords'
 router.get('/', (req, res) => {
     User.find({}, { password: 0 }, function (err, users) {
@@ -60,7 +62,17 @@ router.get('/:id/project', (req, res) => {
         if (err || item == null) {
             res.send("not found " + err);
         }
-        res.send(item)
+        res.send(item);
+    });
+});
+
+router.get('/:id/comments', (req, res) => { 
+    var id = req.params.id;
+    Comment.find({ author: id }).exec(function (err, item) {
+        if (err || item == null) {
+            res.send("not found " + err);
+        }
+        res.send(item);
     });
 });
 
