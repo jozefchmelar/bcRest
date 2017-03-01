@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var autoIncrement = require('mongoose-auto-increment');
 var SALT_WORK_FACTOR = 10;
 var projectSchema = require('./projectModel');

@@ -21,8 +21,8 @@ app.use(bodyParser.json());
 app.use(securityMiddleware);
 app.use(morgan('dev')); //logging style 
 
-mongoose.connect(config.database);
-console.log('Waiting for database');
+mongoose.connect('mongodb://test:test@ds049436.mlab.com:49436/jojko'  /*config.database*/);
+console.log('Waiting for database \n url : ' + config.database);
 
 // =======================
 // routes 

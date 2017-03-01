@@ -9,9 +9,14 @@
   "author": "jojko",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
-    "mongodb": "^2.2.10"
+    "jsonwebtoken": "7.3.0",
+    "mongodb": "^2.2.10",
+    "mongoose": "4.8.5",
+    "mongoose-auto-increment": "5.0.1",
+    "morgan": "1.8.1"
   },
   "devDependencies": {
     "eslint-plugin-mocha": "^4.6.0",
