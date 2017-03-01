@@ -29,7 +29,9 @@ console.log('Waiting for database \n url : ' + config.database);
 app.use(security);
 app.use('/employee', require('./routes/employeeRoutes'));
 app.use('/project', require('./routes/projectRoutes'));
-
+app.router.get('/', (req, res) => {
+        res.send(":)");
+});
 // =======================
 // start the server 
 // =======================
