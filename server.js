@@ -2,7 +2,7 @@ console.log('Node started');
 // =======================
 // packages
 // ======================= 
-var PORT = 3000;
+var PORT = Number(process.env.PORT || 5000);
 var express = require('express');
 var app = express();
 var jwt = require('jsonwebtoken');
@@ -12,8 +12,7 @@ var morgan = require('morgan'); //logging
 var config = require('./config');
 var security = require('./security');
 var db = mongoose.connection;
-
-// =======================
+ // =======================
 // configuration
 // ======================= 
 app.use(bodyParser.urlencoded({ extended: false }));
