@@ -1,7 +1,7 @@
+var config = require('./config');
 var app = require('express');
 var router = app.Router();
 var jwt = require('jsonwebtoken');
-var config = require('./config');
 
 router.post('/login', (req, res) => {
     var User = require(__parentDir + '/models/employeeModel');
@@ -12,11 +12,12 @@ router.post('/login', (req, res) => {
                 message: 'Error getting token',
 
             });
-        }
-        // test a matching password
-        user.comparePassword(req.body.password, function (err, isMatch) {
+        }else if(user == null)
+            {res.json({success: false, message:'Eror while finding user'})}
+        else{
+            user.comparePassword(req.body.password, function (err, isMatch) {
             if (isMatch == true) {
-                var token = jwt.sign(user, config.secret, {
+                var token = jwt.sign(user, SECRET, {
                     expiresIn: 60 * 60 * 24 // expires in 24 hours
                 });
 
@@ -26,9 +27,35 @@ router.post('/login', (req, res) => {
                     message: 'Enjoy your token!',
                     token: token
                 });
+            }else{
+                res.json({success:false,message:'wrong passsword'})
             }
         });
+        }
+        // test a matching password
+
     });
+
+});
+
+router.post('/register',(req,res)=>{
+    /*
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true , unique:true},
+    password:
+    */
+    var User = require(__parentDir + '/models/employeeModel');
+    var user = new User()
+    console.log(req.body)
+    user.firstName=req.body.firstName
+    user.lastName=req.body.lastName
+    user.email=req.body.email
+    user.password=req.body.password
+    console.log(req.body.email)
+    res.send(user.save())
+
+
 
 });
 
@@ -38,7 +65,7 @@ router.get('/logout', (req, res) => {
 });
 
 securityMiddleware = function (req, res, next) {
-    if (req.originalUrl === '/login') {
+    if (req.originalUrl === '/login' || req.originalUrl==='/register') {
         next();
     }
     else {
