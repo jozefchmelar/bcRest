@@ -24,8 +24,7 @@ router.post('/login', (req, res) => {
                 // return the information including token as JSON
                 res.json({
                     success: true,
-                    message: 'Enjoy your token!',
-                    token: token
+                    message: token,
                 });
             }else{
                 res.json({success:false,message:'wrong passsword'})
@@ -52,8 +51,14 @@ router.post('/register',(req,res)=>{
     user.lastName=req.body.lastName
     user.email=req.body.email
     user.password=req.body.password
-    console.log(req.body.email)
-    res.send(user.save())
+    user.save(function (err,user,isSuccess){
+        if(isSuccess)
+            return  res.json({success:true,message:err})
+        else
+             res.json({succes:false,message:err})
+
+    })
+    res.json({success:true,message:'user saved'})
 
 
 
