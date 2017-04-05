@@ -7,7 +7,6 @@ var employee = require('./employeeModel');
 
 
 var commentSchema = new Schema({
-    _id: Number,
     author: {type: Schema.Types.Number , ref:'Employee', required: true},
     text: { type: String, required: true },    
     created: {type: Date,  default: Date.now}

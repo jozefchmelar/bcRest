@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 router.get('/:number', (req, res) => {
     var number = req.params.number;
     var attributesToDispaly = 'firstName lastName email';
-    Project.findOne({ number: number }).populate('employees',attributesToDispaly).exec(function (err, item) {
+    Project.findOne({ _id: number }).populate('employees',attributesToDispaly).exec(function (err, item) {
         if (err || item == null) {
             res.send("not found");
         } else {
@@ -139,7 +139,7 @@ router.get('/:number/comment', (req, res) => {
 });
 
 router.put('/:number/comment', (req, res) => {
-    var number = req.params.number;
+    var number = req.params.number
     var commentId = req.body._id;
     var changedText = req.body.text;
     Comment.findOne({ _id: commentId }, (err, commentToEdit) => {
