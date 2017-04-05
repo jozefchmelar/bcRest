@@ -58,10 +58,12 @@ router.delete('/:id', (req, res) => {
 
 router.get('/:id/project', (req, res) => {
     var id = req.params.id;
-    User.findOne({ _id: id }).populate('projects').exec(function (err, item) {
+    User.findOne({ _id: id }).populate('projects').populate('employees').exec(function (err, item) {
         if (err || item == null) {
             res.send("not found " + err);
         }
+        item = item.toObject()
+        delete item["password"]
         res.send(item);
     });
 });
