@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 
 router.get('/:number', (req, res) => {
     var number = req.params.number;
-    var attributesToDispaly = 'firstName lastName email';
+    var attributesToDispaly = 'firstName lastName email phone position';
     Project.findOne({ _id: number }).populate('employees',attributesToDispaly).exec(function (err, item) {
         if (err || item == null) {
             res.send("not found");
