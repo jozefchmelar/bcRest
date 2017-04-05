@@ -20,11 +20,15 @@ router.post('/login', (req, res) => {
                 var token = jwt.sign(user, SECRET, {
                     expiresIn: 60 * 60 * 24 // expires in 24 hours
                 });
-
+                
+                 { password: 0 }
+                 user=user.toObject()
+                 delete user["password"]
                 // return the information including token as JSON
                 res.json({
                     success: true,
-                    message: token,
+                    token: token,
+                    user:user
                 });
             }else{
                 res.json({success:false,message:'wrong passsword'})
@@ -79,11 +83,10 @@ securityMiddleware = function (req, res, next) {
         // decode token
         if (token) {
             // verifies secret and checks exp
-            jwt.verify(token, config.secret, function (err, decoded) {
+            jwt.verify(token, SECRET, function (err, decoded) {
                 if (err) {
-                    next();
                    
-                   // return res.json({ success: false, message: 'Failed to authenticate token.' });
+                   return res.json({ success: false, message: 'Failed to authenticate token.' });
                 } else {
                     // if everything is good, save to request for use in other routes
                     req.decoded = decoded;
