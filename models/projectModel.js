@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var employeeSchema = require('./employeeModel');
 var autoIncrement = require('mongoose-auto-increment');
+    var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var projectSchema = new Schema({  
 	_id : { type: String, required: true, unique: true },    
@@ -9,7 +10,7 @@ var projectSchema = new Schema({
     name: { type: String, required: true },
     costumer: { type: String, required: true },
     employees: [{type: Number , ref: 'Employee'}],
-    comments: [{type: Schema.Types.ObjectId, ref:'Comment'}]
+    comments: [{type:ObjectId, ref:'Comment'}]
 },
     {
         versionKey: false // disables __v  in schema

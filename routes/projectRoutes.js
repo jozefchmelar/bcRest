@@ -104,17 +104,17 @@ router.post('/:number/add', (req, res) => {
 router.post('/:number/comment', (req, res) => {
     var number = req.params.number;
 
-    Project.findOne({ number: number }).exec(function (err, foundProject) {
+    Project.findOne({ _id: number }).exec(function (err, foundProject) {
         if (err || foundProject == null) {
             res.send("not found");
         } else {
-            var comment = new Comment();
-            comment.author = req.body.userId;
-            comment.text = req.body.text;
-            comment.save();
-            foundProject.comments.push(comment);
+            var comment = new Comment(req.body);
+            // comment.author = req.body.author;
+            // comment.text = req.body.text;
+            console.log(comment.save());
+            foundProject.comments.push(comment._id);
             foundProject.save();
-            res.send(comment);
+            res.send( {comment :comment, success:true});
         }
     });
 });
@@ -122,7 +122,7 @@ router.post('/:number/comment', (req, res) => {
 router.get('/:number/comment', (req, res) => {
     var number = req.params.number;
 
-    Project.findOne({ number: number }).populate({ path: 'comments', populate: { path: 'author', model: 'Employee' } }).exec(function (err, foundProject) {
+    Project.findOne({ _id: number }).populate({ path: 'comments', populate: { path: 'author', model: 'Employee' } }).exec(function (err, foundProject) {
         if (err || foundProject == null) {
             res.send("not found");
         } else {
