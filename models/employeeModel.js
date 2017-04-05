@@ -8,8 +8,8 @@ var employeeSchema = new Schema({
     _id: Number,
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    // position: {type:String},
-    // phone: {type:String},
+    position: {type:String},
+    phone: {type:String},
     email: { type: String, required: true , unique:true},
     password: { type: String, required: true },
     projects: [{type: String , ref:'Project', unique:true}]
