@@ -111,9 +111,8 @@ router.post('/:number/comment', (req, res) => {
             res.send("not found");
         } else {
             var comment = new Comment(req.body);
-            
+            comment.save()            
             foundProject.comments.push(comment._id);
-            comment.save()
             foundProject.save();
  
             res.send( {comment :comment, success:true});
