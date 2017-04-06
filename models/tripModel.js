@@ -10,7 +10,8 @@ var businessTripSchema = new Schema({
 
     employees: [{type: Number , ref:'Employee',required: true}],
     car:  {type: String ,required: true } ,
-    reason:{type:String ,required: true }
+    reason:{type:String ,required: true },
+    date :{type: Date}
 },
     {
         versionKey: false // disables __v  in schema

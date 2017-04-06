@@ -189,18 +189,14 @@ router.get('/:number/trip', (req, res) => {
     var number = req.params.number;
 
     Project.findOne({ _id: number })
-   .populate({ path: 'trips', populate: { path: 'employees', model: 'Employee' } })
+   .populate({ path: 'trips', populate: { path: 'employees', model: 'Employee', select:'firstName lastName email phone position' } })
     .exec(function (err, foundProject) {
         if (err || foundProject == null) {
             res.send("not found");
         } else {
-            var found = foundProject
-           // found = found.toObject();
-            // for (var i = 0; i < found.length; i++) {
-            //     found[i].author.password = undefined;
-            //     found[i].author.projects = undefined;
-            // }
-            res.send(found);
+            var found = foundProject   
+            found = found.toObject();
+            res.send(found.trips);
         }
     });
 });
