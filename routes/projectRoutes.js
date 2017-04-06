@@ -111,8 +111,9 @@ router.post('/:number/comment', (req, res) => {
             res.send("not found");
         } else {
             var comment = new Comment(req.body);
-           
+            
             foundProject.comments.push(comment._id);
+            comment.save()
             foundProject.save();
  
             res.send( {comment :comment, success:true});
@@ -172,7 +173,7 @@ router.post('/:number/trip', (req,res) => {
             var trip = new Trip(req.body)
           //  trip = trip.save()
           console.log(trip)
-            foundProject.trips.push(trip._id)
+            foundProject.trips.push(trip._id)            
             trip.save()
             foundProject.save()
             res.send( {trip :trip, success:true , project:foundProject._id});
