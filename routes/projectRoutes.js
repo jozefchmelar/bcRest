@@ -3,11 +3,13 @@ var ObjectId = require('mongodb').ObjectId;
 var path = require('path');
 var router = app.Router();
 
+
 __parentDir = path.dirname(process.mainModule.filename);
 
 var User = require(__parentDir + '/models/employeeModel');
 var Project = require(__parentDir + '/models/projectModel');
 var Comment = require(__parentDir + '/models/commentModel');
+var Trip = require(__parentDir + '/models/tripModel');
 
 router.get('/', (req, res) => {
     Project.find({}, function (err, projects) {
@@ -109,11 +111,10 @@ router.post('/:number/comment', (req, res) => {
             res.send("not found");
         } else {
             var comment = new Comment(req.body);
-            // comment.author = req.body.author;
-            // comment.text = req.body.text;
-            console.log(comment.save());
+           
             foundProject.comments.push(comment._id);
             foundProject.save();
+ 
             res.send( {comment :comment, success:true});
         }
     });
@@ -131,7 +132,6 @@ router.get('/:number/comment', (req, res) => {
             for (var i = 0; i < found.length; i++) {
                 found[i].author.password = undefined;
                 found[i].author.projects = undefined;
-                console.log(found[i].author);
             }
             res.send(found);
         }
@@ -165,6 +165,47 @@ router.delete('/:number/comment', (req, res) => {
 });
 
 
+router.post('/:number/trip', (req,res) => { 
+    Project.findOne({ _id: (req.params.number) }, (err, foundProject) => {
+        if(!err){
+
+            var trip = new Trip(req.body)
+          //  trip = trip.save()
+          console.log(trip)
+            foundProject.trips.push(trip._id)
+            trip.save()
+            foundProject.save()
+            res.send( {trip :trip, success:true , project:foundProject._id});
+            }else
+            {
+                res.send({success:false})
+            }
+
+            })
+})
+
+
+router.get('/:number/trip', (req, res) => {
+    var number = req.params.number;
+
+    Project.findOne({ _id: number })
+   .populate({ path: 'trips', populate: { path: 'employees', model: 'Employee' } })
+    .exec(function (err, foundProject) {
+        if (err || foundProject == null) {
+            res.send("not found");
+        } else {
+            var found = foundProject
+           // found = found.toObject();
+            // for (var i = 0; i < found.length; i++) {
+            //     found[i].author.password = undefined;
+            //     found[i].author.projects = undefined;
+            // }
+            res.send(found);
+        }
+    });
+});
+
+        
 
 
 

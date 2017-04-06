@@ -4,6 +4,7 @@ var bcrypt = require('bcryptjs');
 var autoIncrement = require('mongoose-auto-increment');
 var SALT_WORK_FACTOR = 10;
 var projectSchema = require('./projectModel');
+
 var employeeSchema = new Schema({
     _id: Number,
     firstName: { type: String, required: true },
