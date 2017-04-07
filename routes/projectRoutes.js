@@ -31,14 +31,50 @@ router.get('/:number', (req, res) => {
 
 
 router.post('/', (req, res) => {
+
     console.log(req.body)
     var newProject = new Project(req.body);
     console.log(newProject)
     var saved = newProject.save(function (err) {
         if(err) {
             console.error('ERROR!' + err);
+        }else{
+            Project.findOne({ _id: newProject._id }, function (err, foundProject) {
+        if (err || foundProject == null) {
+            res.send("project not found");
+        } else {
+            //found project
+            var usersIDsToAdd = (newProject.employees);
+            var project = foundProject;
+            // add only new user numbers to project
+            for (userID of usersIDsToAdd) {
+                if (project.employees.indexOf(userID) === -1) {
+                    project.employees.push(userID);
+                }
+            }
+            project.save();
+            //for every person I added to the project, update their project list.
+            for (userID of usersIDsToAdd) {
+                User.findOne({ _id: userID }, (err, foundUser) => {
+                    if (err || foundUser == null) {
+                        res.send("project not found");
+                    } else {
+                        var userToAdd = foundUser;
+                        if (userToAdd.projects.indexOf(project._id) === -1) {
+                            userToAdd.projects.push(project._id);
+                        }
+                        userToAdd.save();
+                    }
+                });
+            }
+            //res.send(true);
         }
     });
+        }
+    });
+
+    
+
     console.log(saved)
 
     res.send(newProject);
@@ -51,6 +87,13 @@ router.put('/:id', (req, res) => {
         } else {
             item = req.body;
             item.save;
+
+
+
+
+
+
+
             send(item);
         }
     });
@@ -102,9 +145,11 @@ router.post('/:number/add', (req, res) => {
                     }
                 });
             }
-            res.send("OK");
+            res.send(true);
         }
     });
+
+
 });
 
 // post comment on certain project
