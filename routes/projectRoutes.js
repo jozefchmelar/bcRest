@@ -31,9 +31,17 @@ router.get('/:number', (req, res) => {
 
 
 router.post('/', (req, res) => {
+    console.log(req.body)
     var newProject = new Project(req.body);
-    var saved = newProject.save();
-    res.send(saved);
+    console.log(newProject)
+    var saved = newProject.save(function (err) {
+        if(err) {
+            console.error('ERROR!' + err);
+        }
+    });
+    console.log(saved)
+
+    res.send(newProject);
 });
 
 router.put('/:id', (req, res) => {
@@ -66,7 +74,7 @@ router.delete('/:id', (req, res) => {
 router.post('/:number/add', (req, res) => {
     var numbeOfProjectToFind = req.params.number + '';
 
-    Project.findOne({ number: numbeOfProjectToFind }, function (err, foundProject) {
+    Project.findOne({ _id: numbeOfProjectToFind }, function (err, foundProject) {
         if (err || foundProject == null) {
             res.send("project not found");
         } else {

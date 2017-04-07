@@ -6,13 +6,13 @@ var autoIncrement = require('mongoose-auto-increment');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var projectSchema = new Schema({  
-	_id : { type: String, required: true, unique: true },    
+	_id : 		{ type: String, required: true			},    
+    name: 		{ type: String, required: true 							},
+    costumer: 	{ type: String, required: true 							},
+    employees: 	[ {type: Number, 		ref: 	'Employee'	,default:[]	}],
+    comments: 	[ {type:ObjectId, 		ref: 	'Comment'	,default:[]	}],
+    trips : 	[ {type:ObjectId, 		ref: 	'Trip'		,default:[]	}]
     //number: { type: String, required: true, unique: true },    
-    name: { type: String, required: true },
-    costumer: { type: String, required: true },
-    employees: [{type: Number , ref: 'Employee'}],
-    comments: [{type:ObjectId, ref:'Comment'}],
-    trips : [{type:ObjectId, ref: 'Trip'}]
 
 },
     {
