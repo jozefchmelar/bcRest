@@ -115,11 +115,16 @@ router.delete('/:id', (req, res) => {
 // to project of "number" 
 
 router.post('/:number/add', (req, res) => {
-    var numbeOfProjectToFind = req.params.number + '';
+    var numbeOfProjectToFind = ""+req.params.number+"" ;
 
     Project.findOne({ _id: numbeOfProjectToFind }, function (err, foundProject) {
-        if (err || foundProject == null) {
-            res.send("project not found");
+        if (err ) {
+            console.log(_id)
+            console.log(numbeOfProjectToFind)
+            console.log(_id===numbeOfProjectToFind)
+
+            res.send(false);
+            next()
         } else {
             //found project
             var usersIDsToAdd = (req.body.people);
@@ -140,12 +145,16 @@ router.post('/:number/add', (req, res) => {
                         var userToAdd = foundUser;
                         if (userToAdd.projects.indexOf(project.number) === -1) {
                             userToAdd.projects.push(project.number);
+                             userToAdd.save();
                         }
-                        userToAdd.save();
+                       
+
                     }
                 });
+
             }
-            res.send(true);
+                        res.send(true);
+
         }
     });
 
