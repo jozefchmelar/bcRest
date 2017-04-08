@@ -12,6 +12,8 @@ var projectSchema = new Schema({
     employees: 	[ {type: Number, 		ref: 	'Employee'	,default:[]	}],
     comments: 	[ {type:ObjectId, 		ref: 	'Comment'	,default:[]	}],
     trips : 	[ {type:ObjectId, 		ref: 	'Trip'		,default:[]	}]
+    ,createdAt: 	{type: Date,  default: Date.now}
+
     //number: { type: String, required: true, unique: true },    
 
 },
